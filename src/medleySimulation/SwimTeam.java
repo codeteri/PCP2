@@ -2,6 +2,8 @@
 //Class to represent a swim team - which has four swimmers
 package medleySimulation;
 
+import java.util.concurrent.CountDownLatch;
+
 import medleySimulation.Swimmer.SwimStroke;
 
 public class SwimTeam extends Thread {
@@ -10,11 +12,14 @@ public class SwimTeam extends Thread {
 	private Swimmer [] swimmers;
 	private int teamNo; //team number 
 
-	
 	public static final int sizeOfTeam=4;
-	
-	SwimTeam( int ID, FinishCounter finish,PeopleLocation [] locArr ) {
+
+	// Shared latch to control simulation start
+	private static CountDownLatch startLatch;
+
+	SwimTeam(int ID, FinishCounter finish, PeopleLocation[] locArr, CountDownLatch latch) {
 		this.teamNo=ID;
+		startLatch = latch;  // Assign the latch from the main simulation
 		
 		swimmers= new Swimmer[sizeOfTeam];
 	    SwimStroke[] strokes = SwimStroke.values();  // Get all enum constants
@@ -26,19 +31,21 @@ public class SwimTeam extends Thread {
 			swimmers[s] = new Swimmer(i,teamNo,locArr[i],finish,speed,strokes[s]); //hardcoded speed for now
 		}
 	}
-	
-	
+
 	public void run() {
 		try {	
+			// Wait for the Start button to be pressed
+			startLatch.await();
+			
 			for(int s=0;s<sizeOfTeam; s++) { //start swimmer threads
 				swimmers[s].start();
 				
 			}
 			
-			for(int s=0;s<sizeOfTeam; s++) swimmers[s].join();			//don't really need to do this;
+			for(int s=0;s<sizeOfTeam; s++) {swimmers[s].join();}
+			
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

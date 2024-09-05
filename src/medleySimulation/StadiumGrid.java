@@ -143,9 +143,3 @@ public GridBlock jumpTo(GridBlock currentBlock,int x, int y,PeopleLocation myLoc
 		return null;
 	}
 }
-
-
-	
-
-	
-
