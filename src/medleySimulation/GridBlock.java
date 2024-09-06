@@ -14,7 +14,7 @@ public class GridBlock {
 	
 	GridBlock(boolean startBlock) throws InterruptedException {
 		isStart=startBlock;
-		isOccupied= -1;
+		isOccupied= -1; // -1 means unoccupied
 	}
 	
 	GridBlock(int x, int y, boolean startBlock) throws InterruptedException {
@@ -25,6 +25,15 @@ public class GridBlock {
 	public   int getX() {return coords[0];}  
 	
 	public   int getY() {return coords[1];}
+
+	// Method to attempt to occupy the block
+	public synchronized boolean occupy(int swimmerID) {
+		if (isOccupied==-1) { // block is not occupied
+			isOccupied=swimmerID; // occupy the block
+			return true;
+		}
+		return false; // block is occupied
+	}
 	
 	
 	
@@ -39,7 +48,7 @@ public class GridBlock {
 	
 	//release a block
 	public  void release() {
-		isOccupied= -1;
+		isOccupied= -1; // Mark
 	}
 	
 
