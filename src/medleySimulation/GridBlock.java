@@ -4,7 +4,6 @@
 
 package medleySimulation;
 
-
 public class GridBlock {
 	
 	private int isOccupied; 
