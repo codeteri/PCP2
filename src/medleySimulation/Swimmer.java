@@ -6,8 +6,8 @@ package medleySimulation;
 import java.awt.Color;
 import java.util.Random;
 
-public class Swimmer extends Thread {
 
+public class Swimmer extends Thread {
     public static StadiumGrid stadium; // shared 
     private FinishCounter finish; // shared
 
@@ -19,6 +19,8 @@ public class Swimmer extends Thread {
     private int ID; // thread ID 
     private int team; // team ID
     private GridBlock start;
+
+    private static EntranceManager entranceManager; // Added for managing entrance
 
     public enum SwimStroke {
         Backstroke(1, 2.5, Color.black),
@@ -47,8 +49,8 @@ public class Swimmer extends Thread {
 
     private final SwimStroke swimStroke;
 
-    // Constructor
-    Swimmer(int ID, int t, PeopleLocation loc, FinishCounter f, int speed, SwimStroke s) {
+    // Add the EntranceManager as a parameter in the constructor
+    Swimmer(int ID, int t, PeopleLocation loc, FinishCounter f, int speed, SwimStroke s, EntranceManager manager) {
         this.swimStroke = s;
         this.ID = ID;
         movingSpeed = speed; // range of speeds for swimmers
@@ -57,19 +59,17 @@ public class Swimmer extends Thread {
         start = stadium.returnStartingBlock(team);
         finish = f;
         rand = new Random();
+        entranceManager = manager; // Initialize entrance manager
     }
 
-    // getter
     public int getX() {
         return currentBlock.getX();
     }
 
-    // getter
     public int getY() {
         return currentBlock.getY();
     }
 
-    // getter
     public int getSpeed() {
         return movingSpeed;
     }
@@ -78,59 +78,48 @@ public class Swimmer extends Thread {
         return swimStroke;
     }
 
-    // !!!You do not need to change the method below!!!
-    // swimmer enters stadium area
+    // Swimmer enters stadium area
     public void enterStadium() throws InterruptedException {
+        entranceManager.addSwimmer(this); // Request to enter
+        synchronized (entranceManager) {
+            entranceManager.wait(); // Wait until it's the swimmer's turn
+        }
         currentBlock = stadium.enterStadium(myLocation);  //
         sleep(200); // wait a bit at door, look around
     }
 
-    // !!!You do not need to change the method below!!!
     // go to the starting blocks
-    // printlns are left here for help in debugging
     public void goToStartingBlocks() throws InterruptedException {
         int x_st = start.getX();
         int y_st = start.getY();
-        // System.out.println("Thread "+this.ID + " has start position: " + x_st  + " " +y_st );
-        // System.out.println("Thread "+this.ID + " at " + currentBlock.getX()  + " " +currentBlock.getY() );
         while (currentBlock != start) {
-            // System.out.println("Thread "+this.ID + " has starting position: " + x_st  + " " +y_st );
-            // System.out.println("Thread "+this.ID + " at position: " + currentBlock.getX()  + " " +currentBlock.getY() );
             sleep(movingSpeed * 3); // not rushing 
             currentBlock = stadium.moveTowards(currentBlock, x_st, y_st, myLocation); // head toward starting block
-            // System.out.println("Thread "+this.ID + " moved toward start to position: " + currentBlock.getX()  + " " +currentBlock.getY() );
         }
         System.out.println("-----------Thread " + this.ID + " at start " + currentBlock.getX() + " " + currentBlock.getY());
     }
 
-    // !!!You do not need to change the method below!!!
-    // dive in to the pool
+    // dive into the pool
     private void dive() throws InterruptedException {
         int x = currentBlock.getX();
         int y = currentBlock.getY();
         currentBlock = stadium.jumpTo(currentBlock, x, y - 2, myLocation);
     }
 
-    // !!!You do not need to change the method below!!!
     // swim there and back
     private void swimRace() throws InterruptedException {
         int x = currentBlock.getX();
         while ((currentBlock.getY()) != 0) {
             currentBlock = stadium.moveTowards(currentBlock, x, 0, myLocation);
-            // System.out.println("Thread "+this.ID + " swimming " + currentBlock.getX()  + " " +currentBlock.getY() );
             sleep((int) (movingSpeed * swimStroke.strokeTime)); // swim
-            System.out.println("Thread " + this.ID + " swimming  at speed" + movingSpeed);
         }
 
         while ((currentBlock.getY()) != (StadiumGrid.start_y - 1)) {
             currentBlock = stadium.moveTowards(currentBlock, x, StadiumGrid.start_y, myLocation);
-            // System.out.println("Thread "+this.ID + " swimming " + currentBlock.getX()  + " " +currentBlock.getY() );
             sleep((int) (movingSpeed * swimStroke.strokeTime)); // swim
         }
-
     }
 
-    // !!!You do not need to change the method below!!!
     // after finished the race
     public void exitPool() throws InterruptedException {
         int bench = stadium.getMaxY() - swimStroke.getOrder(); // they line up
@@ -145,7 +134,6 @@ public class Swimmer extends Thread {
     @Override
     public void run() {
         try {
-            // Swimmer arrives
             sleep(movingSpeed + (rand.nextInt(10))); // arriving takes a while
             myLocation.setArrived();
             enterStadium();
@@ -158,12 +146,10 @@ public class Swimmer extends Thread {
             if (swimStroke.order == 4) {
                 finish.finishRace(ID, team); // finish line
             } else {
-                // System.out.println("Thread "+this.ID + " done " + currentBlock.getX()  + " " +currentBlock.getY() );
                 exitPool(); // if not last swimmer leave pool
             }
 
         } catch (InterruptedException e1) { // do nothing
         }
     }
-
 }

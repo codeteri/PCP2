@@ -34,18 +34,16 @@ public class GridBlock {
 		}
 		return false; // block is occupied
 	}
-	
-	
-	
+
 	//Get a block
-	public  boolean get(int threadID) throws InterruptedException {
+	public synchronized boolean get(int threadID) throws InterruptedException {
 		if (isOccupied==threadID) return true; //thread Already in this block
 		if (isOccupied>=0) return false; //space is occupied
 		isOccupied= threadID;  //set ID to thread that had block
 		return true;
 	}
-		
-	
+
+
 	//release a block
 	public  void release() {
 		isOccupied= -1; // Mark
