@@ -15,15 +15,22 @@ public class CounterDisplay  implements Runnable {
 	CounterDisplay(JLabel w, FinishCounter score) {
         this.win=w;
         this.results=score;
+				this.win.setHorizontalAlignment(JLabel.CENTER);
     }
 	
 	public void run() { //this thread just updates the display of a text field
         while (true) {
         	//test changes colour when the race is won
 					if (results.isRaceWon()) {
-						win.setForeground(Color.RED);
-								win.setText("Winning Team: " + results.getWinningTeam() + "!!"); 
-					}
+						win.setForeground(Color.BLACK);
+						win.setText("<html><div style='text-align: center;'>"
+							+ "Winning Team: " + results.getWinningTeam() + " (Gold) 🥇<br>" 
+							+ "Second Place Team: " + results.getSecondTeam() + " (Silver) 🥈<br>"
+							+ "Third Place Team: " + results.getThirdTeam() + " (Bronze) 🥉"
+							+ "</div></html>");
+
+							// For creativity we added Gold,Silver and Bronze Unicode chars to the end results 
+						}
 					else {
 						win.setForeground(Color.BLACK);
 						win.setText("------"); 
