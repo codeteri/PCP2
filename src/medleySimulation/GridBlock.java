@@ -4,6 +4,7 @@
 
 package medleySimulation;
 
+
 public class GridBlock {
 	
 	private int isOccupied; 
@@ -13,7 +14,7 @@ public class GridBlock {
 	
 	GridBlock(boolean startBlock) throws InterruptedException {
 		isStart=startBlock;
-		isOccupied= -1; // -1 means unoccupied
+		isOccupied= -1;
 	}
 	
 	GridBlock(int x, int y, boolean startBlock) throws InterruptedException {
@@ -21,19 +22,12 @@ public class GridBlock {
 		coords = new int [] {x,y};
 	}
 	
-	public   int getX() {return coords[0];}  
+	public synchronized int getX() {return coords[0];}  
 	
-	public   int getY() {return coords[1];}
-
-	// Method to attempt to occupy the block
-	public synchronized boolean occupy(int swimmerID) {
-		if (isOccupied==-1) { // block is not occupied
-			isOccupied=swimmerID; // occupy the block
-			return true;
-		}
-		return false; // block is occupied
-	}
-
+	public synchronized int getY() {return coords[1];}
+	
+	
+	
 	//Get a block
 	public synchronized boolean get(int threadID) throws InterruptedException {
 		if (isOccupied==threadID) return true; //thread Already in this block
@@ -41,23 +35,24 @@ public class GridBlock {
 		isOccupied= threadID;  //set ID to thread that had block
 		return true;
 	}
-
-
+		
+	
 	//release a block
-	public  void release() {
-		isOccupied= -1; // Mark
+	public synchronized void release() {
+		isOccupied = -1;
+		notifyAll();
 	}
 	
 
 	//is a bloc already occupied?
-	public  boolean occupied() {
+	public synchronized boolean occupied() {
 		if(isOccupied==-1) return false;
 		return true;
 	}
 	
 	
 	//is a start block
-	public  boolean isStart() {
+	public synchronized boolean isStart() {
 		return isStart;	
 	}
 
