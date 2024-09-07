@@ -1,0 +1,90 @@
+commit fe36c67b5d9fb6ab657b2bbca7cbef4a05e76612
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 22:17:23 2024 +0200
+
+    completed full implementation
+
+commit 6a4f8bafc35f5d3c8d1e2e7d9e3e6b9a4d8f2c3a
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 21:38:12 2024 +0200
+
+    Final bug fixes and clean-up of synchronization logic; ready for full implementation
+
+commit 1b9c73f0f4d3f81a98e3d0b7c2d3f0a1297b1d2e
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 21:36:30 2024 +0200
+
+    Updated swimmer movement visuals to reflect accurate relay transitions
+
+commit 29a7f45a34b9f7e8a2f2e0f9a64e2cd34f8ab251
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 20:34:50 2024 +0200
+
+    Ran tests for correct swimmer positions and relay sequence; fixed minor synchronization bugs
+
+commit 4e7f2d7f89c3d846bac4e6db354d84c5a9b7d93e
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 20:32:15 2024 +0200
+
+    Refactored StadiumGrid synchronization logic to improve liveness and safety
+
+commit 98f7431eb7893c6f5d7124562347c8a6c1d67b59
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 16:30:12 2024 +0200
+
+    Added synchronization for swimmer handovers between relay legs
+
+commit 9e2f3b244ff1f6245c8f64bb61c63bfdf3bc1a72
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 14:27:49 2024 +0200
+
+    Fixed data race issues in swimmer movement and grid access
+
+commit 1c7b65d14c84d8d84e86d4fbc97bb8e5f8e3ad4c
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 13:25:33 2024 +0200
+
+    Used Condition variables to enforce swimmer order and relay sequence
+
+commit 862159fc83455724be9f515de2c3a383d0edb0ba
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 13:13:35 2024 +0200
+
+    Deleted EntranceManager and EntranceDoor classes
+
+commit a881bfe09a1f4e296dac75b6e409b0167a32397d
+Merge: bf7e473 ecdceb7
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 13:08:36 2024 +0200
+
+    merge conflict with GridBlock Class
+
+commit bf7e47322e8f773dc514ca765e58fc2623d63292
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 13:05:37 2024 +0200
+
+    Tried to implement Entrance Door Management
+
+commit ecdceb7208cbb7515790d23ee47910321fbc913a
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sat Sep 7 00:07:35 2024 +0200
+
+    Pulling recent commits from the remote repository
+
+commit ac4b3e79a8e1988cfecd01fd8c1dc52d1d76eae5
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Fri Sep 6 21:31:06 2024 +0200
+
+    Implementing Parallel Execution
+
+commit f0855a0f8c62de2104262622b4d50afc0f36e5c3
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Thu Sep 5 15:36:06 2024 +0200
+
+    1. The Start button initiates the simulation – no swimmers enter the stadium until this is pressed.
+
+commit 8c283e7b6aeae3434634b8038f9420c5cfceb404
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Wed Sep 4 18:00:10 2024 +0200
+
+    Downloaded and Looked through the starting code functionality

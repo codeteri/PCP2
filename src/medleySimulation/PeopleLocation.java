@@ -57,6 +57,6 @@ public class PeopleLocation  { // this is made a separate class so don't have to
 		return inStadium;
 	}
 	//getter and setter
-	public  Color getColor() { return myColor; }
-	public  void setColor(Color myColor) { this.myColor= myColor; }
-}
+		public  Color getColor() { return myColor; }
+		public  void setColor(Color myColor) { this.myColor= myColor; }
+	}
