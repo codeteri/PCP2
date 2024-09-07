@@ -28,10 +28,10 @@ public class Swimmer extends Thread {
 	private static CyclicBarrier barrier = new CyclicBarrier(10);
 
 	public enum SwimStroke {
-		Backstroke(1, 2.5, Color.black),
-		Breaststroke(2, 2.1, new Color(255, 102, 0)),
-		Butterfly(3, 2.55, Color.magenta),
-		Freestyle(4, 2.8, Color.red);
+		Backstroke(1, 2.5, Color.black), // Backstroke stroke with stroke time 2.5 and color black
+		Breaststroke(2, 2.1, new Color(255, 102, 0)), // Breaststroke stroke with stroke time 2.1 and color orange
+		Butterfly(3, 2.55, Color.magenta), // Butterfly stroke with stroke time 2.55 and color magenta
+		Freestyle(4, 2.8, Color.red); // Freestyle stroke with stroke time 2.8 and color red
 
 		private final double strokeTime;
 		private final int order; // in minutes
@@ -86,7 +86,6 @@ public class Swimmer extends Thread {
 		return swimStroke;
 	}
 
-
 	// swimmer enters stadium area
 	public void enterStadium() throws InterruptedException {
 		currentBlock = stadium.enterStadium(myLocation); //
@@ -97,9 +96,9 @@ public class Swimmer extends Thread {
 	public void goToStartingBlocks() throws InterruptedException {
 		int x_st = start.getX();
 		int y_st = start.getY();
-		
+
 		while (currentBlock != start) {
-			
+
 			sleep(movingSpeed * 3); // not rushing
 			currentBlock = stadium.moveTowards(currentBlock, x_st, y_st, myLocation); // head towards starting block
 		}
@@ -113,7 +112,6 @@ public class Swimmer extends Thread {
 		int y = currentBlock.getY();
 		currentBlock = stadium.jumpTo(currentBlock, x, y - 2, myLocation);
 	}
-
 
 	private void swimRace() throws InterruptedException {
 		int x = currentBlock.getX();
@@ -129,7 +127,6 @@ public class Swimmer extends Thread {
 		}
 
 	}
-
 
 	// after finished the race
 	public void exitPool() throws InterruptedException {
@@ -149,7 +146,6 @@ public class Swimmer extends Thread {
 			sleep(movingSpeed + (rand.nextInt(10))); // arriving takes a while
 			myLocation.setArrived();
 
-
 			if (this.swimStroke.order != 1) {
 
 				// Gets the number of the previous swimmer
@@ -159,7 +155,7 @@ public class Swimmer extends Thread {
 					// Gets the previous swimmer in the team and checks if they have entered
 					Swimmer prevSwimmer = team.getPreviousSwimmer(prevOrder);
 					while (prevSwimmer.currentBlock == null) {
-						team.wait(); // Tells the simmwer to wait if the previous team member has not entered
+						team.wait(); // Tells the swimmer to wait if the previous team member has not entered
 					}
 				}
 			}
@@ -180,14 +176,15 @@ public class Swimmer extends Thread {
 				System.out.println(e);
 			}
 
-			// Prevents the rest of the swim team from getting into the pool while there is still a swimmer 
+			// Prevents the rest of the swim team from getting into the pool while there is
+			// still a swimmer
 			synchronized (team) {
 				dive();
 				swimRace();
 			}
 
 			if (swimStroke.order == 4) {
-				finish.finishRace(ID, team.getTeamNo()); // fnishline
+				finish.finishRace(ID, team.getTeamNo()); // finish line
 			} else {
 				// System.out.println("Thread "+this.ID + " done " + currentBlock.getX() + " "
 				// +currentBlock.getY() );
