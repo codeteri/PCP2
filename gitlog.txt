@@ -1,3 +1,9 @@
+commit 29a7f45a34b9f7e8a2f2e0f9a64e2cd34f8ab251
+Author: TERRY <codeeeterry@gmail.com>
+Date:   Sun Sep 7 22:28:56 2024 +0200
+
+    Implemented podium menu with medals for top three teams with unicode medals
+
 commit fe36c67b5d9fb6ab657b2bbca7cbef4a05e76612
 Author: TERRY <codeeeterry@gmail.com>
 Date:   Sat Sep 7 22:17:23 2024 +0200
