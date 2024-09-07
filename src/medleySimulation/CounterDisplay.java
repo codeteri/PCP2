@@ -7,11 +7,11 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 //You don't need to change this class
-public class CounterDisplay  implements Runnable {
-	
+public class CounterDisplay implements Runnable {
+
 	private FinishCounter results;
 	private JLabel win;
-		
+
 	CounterDisplay(JLabel w, FinishCounter score) {
         this.win=w;
         this.results=score;

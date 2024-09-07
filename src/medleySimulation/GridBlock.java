@@ -4,56 +4,61 @@
 
 package medleySimulation;
 
+import java.util.concurrent.CountDownLatch;
 
 public class GridBlock {
-	
-	private int isOccupied; 
-	
-	private final boolean isStart;  //is this a starting block?
-	private int [] coords; // the coordinate of the block.
-	
-	GridBlock(boolean startBlock) throws InterruptedException {
-		isStart=startBlock;
-		isOccupied= -1;
+	private final CountDownLatch latch; // Latch to control access to the block
+	private final boolean isStart;  // Indicates if this is a starting block
+	private int[] coords; // Coordinates of the block
+	private int isOccupied; // -1 if free, otherwise the ID of the occupying swimmer
+
+	// Constructor for a block with a start flag
+	GridBlock(boolean startBlock) {
+		isStart = startBlock;
+		latch = new CountDownLatch(1); // Only one permit
+		isOccupied = -1; // Initially free
 	}
-	
-	GridBlock(int x, int y, boolean startBlock) throws InterruptedException {
+
+	// Constructor for a block with coordinates and a start flag
+	GridBlock(int x, int y, boolean startBlock) {
 		this(startBlock);
-		coords = new int [] {x,y};
-	}
-	
-	public synchronized int getX() {return coords[0];}  
-	
-	public synchronized int getY() {return coords[1];}
-	
-	
-	
-	//Get a block
-	public synchronized boolean get(int threadID) throws InterruptedException {
-		if (isOccupied==threadID) return true; //thread Already in this block
-		if (isOccupied>=0) return false; //space is occupied
-		isOccupied= threadID;  //set ID to thread that had block
-		return true;
-	}
-		
-	
-	//release a block
-	public synchronized void release() {
-		isOccupied = -1;
-		notifyAll();
-	}
-	
-
-	//is a bloc already occupied?
-	public synchronized boolean occupied() {
-		if(isOccupied==-1) return false;
-		return true;
-	}
-	
-	
-	//is a start block
-	public synchronized boolean isStart() {
-		return isStart;	
+		coords = new int[]{x, y};
 	}
 
+	// Getter for the X coordinate
+	public int getX() {
+		return coords[0];
+	}
+
+	// Getter for the Y coordinate
+	public int getY() {
+		return coords[1];
+	}
+
+	// Method to attempt to occupy the block
+	public void occupy() throws InterruptedException {
+		latch.await(); // Wait for the latch to be released
+	}
+
+	// Release the block
+	public void release() {
+		latch.countDown(); // Release the latch
+	}
+
+	// Check if the block is a start block
+	public boolean isStart() {
+		return isStart;
+	}
+
+	// Try to acquire the block for the swimmer
+	public synchronized boolean get(int threadID) {
+		if (isOccupied == threadID) {
+			return true; // Swimmer already occupies this block
+		}
+		if (isOccupied == -1) { // Block is free
+			isOccupied = threadID; // Swimmer occupies the block
+			return true;
+		}
+		return false; // Block is occupied by another swimmer
+	}
 }
